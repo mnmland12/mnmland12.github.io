@@ -123,18 +123,20 @@ function populateUI(profile) {
 //add listener for top tracks button
 document.getElementById("topTracksButton").addEventListener("click", async() => {
     const token = localStorage.getItem("accessToken");
+    const timeRange = document.getElementById("timeRange").value;
+    const numOfSongs = document.getElementById("numOfSongs").value;
     if(!token){
         console.error("No access token found.");
         return;
     }
     console.log("Access Token: ", token);
-    const topTracks = await getTopTracks(token);
+    const topTracks = await getTopTracks(token, timeRange, numOfSongs);
     displayTopTracks(topTracks);
 });
 
-async function getTopTracks(token){
+async function getTopTracks(token, timeRange, numOfSongs){
     //get top tracks from last month
-    const res = await fetch('https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=25', {
+    const res = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=${numOfSongs}`, {
         headers:{Authorization: `Bearer ${token}`, 'Content-Type': 'application/json'},
         method: 'GET'
     });
@@ -150,7 +152,17 @@ function displayTopTracks(tracks){
 
     tracks.forEach(track => {
         const song = document.createElement("li");
+
+        const image = document.createElement("img");
+        image.src = track.album.images[0].url;
+        image.alt = `${track.name} album cover`;
+        image.width = 50;
+
+        const songinfo = document.createElement("span");
         song.textContent = `${track.name} by ${track.artists.map(artist => artist.name).join(', ')}`;
+        
+        song.appendChild(image);
+        song.appendChild(songinfo);
         topTracksList.appendChild(song);
     });
 }
