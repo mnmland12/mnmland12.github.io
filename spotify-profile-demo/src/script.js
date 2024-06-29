@@ -132,6 +132,10 @@ document.getElementById("topTracksButton").addEventListener("click", async() => 
     console.log("Access Token: ", token);
     const topTracks = await getTopTracks(token, timeRange, numOfSongs);
     displayTopTracks(topTracks);
+
+    //show table and create playlist button
+    document.getElementById("topTracksTable").style.display = "table";
+    document.getElementById("createPlaylistButton").style.display = "block";
 });
 
 async function getTopTracks(token, timeRange, numOfSongs){
@@ -145,26 +149,68 @@ async function getTopTracks(token, timeRange, numOfSongs){
 }
 
 function displayTopTracks(tracks){
-    const topTracksList = document.getElementById("topTracksList");
-    topTracksList.innerHTML = '';
+    const topTracksTable = document.getElementById("topTracksTable").getElementsByTagName('tbody')[0];
+    topTracksTable.innerHTML = '';
 
     console.log("in display tracks");
 
     tracks.forEach(track => {
-        const song = document.createElement("li");
+        const row = topTracksTable.insertRow();
+
+        const nameArtist = row.insertCell(0);
+        const art = row.insertCell(1);
+        const playButton = row.insertCell(2);
+
+        nameArtist.textContent = `${track.name} by ${track.artists.map(artist => artist.name).join(', ')}`;
 
         const image = document.createElement("img");
         image.src = track.album.images[0].url;
         image.alt = `${track.name} album cover`;
-        image.width = 50;
+        image.width = 100;
 
-        const songinfo = document.createElement("span");
-        song.textContent = `${track.name} by ${track.artists.map(artist => artist.name).join(', ')}`;
-        
-        song.appendChild(image);
-        song.appendChild(songinfo);
-        topTracksList.appendChild(song);
+        art.appendChild(image);
+
+        if(track.preview_url){
+            const button = document.createElement("button");
+            button.innerHTML = "&#9654;";// play symbol for the button.
+            button.onclick = () => togglePlayPause(button, track.preview_url);
+            playButton.appendChild(button);
+        }else{
+            playButton.textContent = "No Preview Available.";
+        }
     });
+}
+
+let currentAudio = null;
+let currentButton = null;
+
+function togglePlayPause(button, previewUrl){
+
+    if(currentAudio && currentAudio.src === previewUrl){
+        if(currentAudio.paused){
+            currentAudio.play();
+            button.innerHTML = "&#10074;&#10074;";//pause symbol
+        }else{
+            currentAudio.pause();
+            button.innerHTML = "&#9654;";//play symbol
+        }
+    }else{
+        if(currentAudio){
+            currentAudio.pause();
+            if(currentButton){
+                currentButton.innerHTML = "&#9654;"; //play symbol
+            }
+        }
+        currentAudio = new Audio(previewUrl);
+        currentAudio.play();
+        button.innerHTML = "&#10074;&#10074;"; //pause symbol
+    }
+
+    currentButton = button;
+
+    currentAudio.onended = () => {
+        button.innerHTML = "&#9654;";//play symbol
+    }
 }
 
 //create a playlist for top songs
@@ -177,7 +223,7 @@ document.getElementById("createPlaylistButton").addEventListener("click", async 
     }
     console.log("Access Token: %s UserID: %s", token, userID);
     const topTracks = await getTopTracks(token);
-    await createPlaylist(token, userID, topTracks); //need to make this method
+    await createPlaylist(token, userID, topTracks); 
 });
 
 async function createPlaylist(token, userID, tracks){

@@ -6,9 +6,15 @@
   <title>My Spotify Profile</title>
   <script src="src/script.js" type="module"></script>
   <style>
-    Body {
+    body {
       background-color: black;
       color: silver;
+    }
+    table{
+      display: none;
+    }
+    #createPlaylistButton{
+      display: none;
     }
   </style>
 </head>
@@ -35,19 +41,24 @@
       <option value="medium_term">Last 6 Months</option>
       <option value="long_term">All Time</option>
     </select>
-  </div>
-
-  <div>
     <label for="numOfSongs">Number Of Songs</label>
     <input type="number" id="numOfSongs" step="1" value="25">
   </div>
-  
+
   <button id="topTracksButton">Show Top Songs</button>
-  <section id="topTracks">
-    <h2>Top Tracks from the Past Month</h2>
-    <ul id="topTracksList"></ul>
-    <button id="createPlaylistButton">Create a Playlist with these songs</button>
-  </section>
+  <button id="createPlaylistButton">Create a Playlist with these songs</button>
+  <table id="topTracksTable">
+    <thead>
+      <tr>
+        <th>Song Name & Artist</th>
+        <th>Album Artwork</th>
+        <th>Song Preview</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
 </body>
 
 </html>
