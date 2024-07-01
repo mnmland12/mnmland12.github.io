@@ -114,8 +114,7 @@ function populateUI(profile) {
     }
     document.getElementById("id").innerText = profile.id;
     document.getElementById("email").innerText = profile.email;
-    document.getElementById("uri").innerText = profile.uri;
-    document.getElementById("uri").setAttribute("href", profile.external_urls.spotify);
+
     document.getElementById("url").innerText = profile.href;
     document.getElementById("url").setAttribute("href", profile.href);
 }
@@ -139,7 +138,7 @@ document.getElementById("topTracksButton").addEventListener("click", async() => 
 });
 
 async function getTopTracks(token, timeRange, numOfSongs){
-    //get top tracks from last month
+    //get top tracks from the given time range
     const res = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=${numOfSongs}`, {
         headers:{Authorization: `Bearer ${token}`, 'Content-Type': 'application/json'},
         method: 'GET'
@@ -217,12 +216,14 @@ function togglePlayPause(button, previewUrl){
 document.getElementById("createPlaylistButton").addEventListener("click", async () => {
     const token = localStorage.getItem("accessToken");
     const userID = localStorage.getItem("userID");
+    const timeRange = document.getElementById("timeRange").value;
+    const numOfSongs = document.getElementById("numOfSongs").value;
     if(!token || !userID){
         console.error("Access Token: %s or UserID: %s not valid.", token, userID);
         return;
     }
     console.log("Access Token: %s UserID: %s", token, userID);
-    const topTracks = await getTopTracks(token);
+    const topTracks = await getTopTracks(token, timeRange, numOfSongs);
     await createPlaylist(token, userID, topTracks); 
 });
 

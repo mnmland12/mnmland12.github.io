@@ -3,62 +3,125 @@
 
 <head>
   <meta charset="utf-8">
-  <title>My Spotify Profile</title>
+  <title>Spotify Top Songs</title>
   <script src="src/script.js" type="module"></script>
   <style>
     body {
       background-color: black;
       color: silver;
+      display: flex;
+      height: 100vh;
+      margin: 0;
     }
-    table{
+    header{
+      text-align: center;
+      padding: 20px;
+    }
+    #topTracksTable{
       display: none;
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    #topTracksTable th, #topTracksTable td{
+      border: 1px solid silver;
+      padding: 10px;
+      text-align: center;
     }
     #createPlaylistButton{
       display: none;
+    }
+    #inputs{
+      width: 100%;
+      margin: auto;
+    }
+    .container{
+      display: flex;
+      flex: 1;
+      width: 100%;
+      overflow: hidden;
+    }
+    .split{
+      overflow-y: auto;
+      padding-top: 20px;
+      flex: 1;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /*vertical center*/
+      align-items: center;
+    }
+    .left{
+      background-color: black;
+      flex: 4;
+    }
+    .right{
+      background-color: black;
+      flex: 6;
+    }
+    .center{
+      text-align: center;
+      width: 100%;
+    }
+    .button{
+      background-color:blue;
+      font-size: 24px;
+      border-radius: 12px;
+      border: 2px solid silver;
+      color: silver;
+      display: block;
+    }
+    .tableContainer{
+      width:100%;
+      overflow-y: auto;
+      max-height: 70vh;
     }
   </style>
 </head>
 
 <body>
-  <h1>Display your Spotify Profile Data</h1>
 
-  <section id="profile">
-    <h2>Logged in as <span id="displayName"></span></h2>
-    <span id="avatar"></span>
-    <ul>
-      <li>User ID: <span id="id"></span></li>
-      <li>Email: <span id="email"></span></li>
-      <li>Spotify URI: <a id="uri" href="#"></a></li>
-      <li>Link: <a id="url" href="#"></a></li>
-      <li>Profile Image: <span id="imgUrl"></span></li>
-    </ul>
-  </section>
+  <div class="container">
+    <div class="split left">
+        <section id="profile" class="center">
+          <h2>Logged in as <span id="displayName"></span></h2>
+          <span id="avatar"></span>
+          <ul>
+            <li>User ID: <span id="id"></span></li>
+            <li>Email: <span id="email"></span></li>
+            <li>Profile Link: <a id="url" href="#"></a></li>
+            <li>Profile Image: <span id="imgUrl"></span></li>
+          </ul>
+        </section>
+    </div>
 
-  <div>
-    <label for="timeRange">Select Time Range:</label>
-    <select id="timeRange">
-      <option value="short_term">Last 4 Weeks</option>
-      <option value="medium_term">Last 6 Months</option>
-      <option value="long_term">All Time</option>
-    </select>
-    <label for="numOfSongs">Number Of Songs</label>
-    <input type="number" id="numOfSongs" step="1" value="25">
+    <div class="split right">
+      <div id="inputs" class="center">
+        <label for="timeRange">Select Time Range:</label>
+        <select id="timeRange">
+          <option value="short_term">Last 4 Weeks</option>
+          <option value="medium_term">Last 6 Months</option>
+          <option value="long_term">All Time</option>
+        </select><br>
+        <label for="numOfSongs">Number Of Songs:</label>
+        <input type="number" id="numOfSongs" step="1" value="25"><br>
+        <button id="topTracksButton" class="button">Show Top Songs</button>      
+        <div class="tableContainer">
+          <table id="topTracksTable" class="tableContainer">
+            <thead>
+              <tr>
+                <th>Song Name & Artist</th>
+                <th>Album Artwork</th>
+                <th>Song Preview</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <button id="createPlaylistButton" class="button">Create a Playlist with these songs</button>
+      </div>
+    </div>
   </div>
-
-  <button id="topTracksButton">Show Top Songs</button>
-  <button id="createPlaylistButton">Create a Playlist with these songs</button>
-  <table id="topTracksTable">
-    <thead>
-      <tr>
-        <th>Song Name & Artist</th>
-        <th>Album Artwork</th>
-        <th>Song Preview</th>
-      </tr>
-    </thead>
-    <tbody>
-
-    </tbody>
-  </table>
 </body>
-
 </html>
