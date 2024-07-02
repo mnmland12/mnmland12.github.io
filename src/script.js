@@ -78,11 +78,19 @@ async function getAccessToken(clientID, code) {
     params.append("redirect_uri", "https://mnmland12.github.io");
     params.append("code_verifier", verifier);
 
+    console.log("Params being sent for access token:", params.toString());
+
     const result = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: params
     });
+
+    if(!result.ok){
+        const errorData = await result.json();
+        console.error("Error Response Data: ", errorData);
+        throw new Error(`Error fetching access token: ${result.statusText}`);
+    }
 
     const data = await result.json();
     console.log("Token response data:", data);
