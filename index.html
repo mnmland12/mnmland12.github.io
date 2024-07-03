@@ -10,6 +10,7 @@
       background-color: black;
       color: silver;
       display: flex;
+      flex-direction: column;
       height: 100vh;
       margin: 0;
     }
@@ -37,6 +38,7 @@
     }
     .container{
       display: flex;
+      flex-direction: column;
       flex: 1;
       width: 100%;
       overflow: hidden;
@@ -75,6 +77,31 @@
       width:100%;
       overflow-y: auto;
       max-height: 70vh;
+    }
+
+    @media(min-width: 600px){
+      .container{
+        flex-direction: row; /*change to rows for a larger screen*/
+      } 
+      .split{
+        flex-direction: column;
+        padding-top: 0;
+      }
+      .left, .right{
+        flex: 1;
+      }
+    }
+
+    @media(min-width: 900px){
+      .left{
+        flex: 4;
+      }
+      .right{
+        flex:6;
+      }
+      .tableContainer{
+        width: 80%;
+      }
     }
   </style>
 </head>
